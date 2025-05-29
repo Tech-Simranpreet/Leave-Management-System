@@ -1,0 +1,46 @@
+{% extends "manager/mdashboardbase.html" %}
+{% block xcontent %}
+
+<div class="container">
+        <div>    
+            <h4>Leave Balance for {{ leave_balances[0]["emp_fname"] }} {{ leave_balances[0]["emp_lname"] }}</h4>         
+            <div class="container" style="margin: 0; padding: 0;">
+                <div class="table-responsive">
+                    <table class="table table-striped table-hover table-bordered" style="width:100%; table-layout: fixed; white-space: normal; word-wrap: break-word;">
+                        <thead class="table-success">
+                            <tr>
+                                <th>Leave Type</th>
+                                <th>Balance (at close of last pay)</th>                                     
+                                <th>Leave approved not paid</th>
+                                <th>Leave applied not yet approved</th>
+                            </tr>
+                        </thead>
+                        <tbody style="background-color: white;">
+                            <tr>
+                                <td>Annual Leave</td>
+                                <td>{{ leave_balances[0]["annual_leave_bal"] }}</td>
+                                <td>{{ leave_balances[0]["approved_annual_leave"] }}</td>
+                                <td>{{ leave_balances[0]["pending_annual_leave"] }}</td>
+                            </tr>
+                            <tr>
+                                <td>Sick Leave</td>
+                                <td>{{ leave_balances[0]["sick_leave_bal"] }}</td>
+                                <td>{{ leave_balances[0]["approved_sick_leave"] }}
+                                <td>{{ leave_balances[0]["pending_sick_leave"] }}</td>                       
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+                <div class="col-12 d-flex justify-content-center align-items-md-center">
+                    <div class="col-md-6 d-flex justify-content-evenly align-items-md-center">
+                        <form action="{{ url_for('patrick.mviewemployee') }}" method="GET">
+                            <input type="hidden" name="emp_id" value="{{ session['emp_id'] }}">
+                            <button class="btn btn-warning btn-sm" type="submit">Return to Employee List</button>
+                        </form>
+                    </div>    
+                </div>
+            </div>
+        </div>          
+</div>
+
+{% endblock %}

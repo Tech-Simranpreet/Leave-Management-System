@@ -1,0 +1,50 @@
+{% extends "admin/adashboardbase.html" %}
+{% block zcontent %}
+
+
+<div class="container">
+    <div class="max-w-800 mx-auto">
+
+        {% with messages = get_flashed_messages(with_categories=true) %}
+            {% if messages %}
+                {% for category, message in messages %}
+                    <div class="max-w-800 mx-auto">
+                        <div  class="alert alert-{{category}} alert-dismissible fade show" role="alert">
+                            <div class="d-flex justify-content-center"> {{ message }} </div>
+                            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="close"></button>
+                        </div>
+                    </div>
+                {% endfor %}  
+            {% endif %}
+        {% endwith %}
+
+        <h3>Add a New Leave Type</h3>
+    
+        <form class="row g-3" action="/admin/dashboard/addleavetype/add" method="POST">
+            <div class="col-md-4">
+                <label class="form-label">Type Name</label>
+                <input type="text" class="form-control" name="type" required>
+            </div>
+            <div class="col-md-4">
+                <label class="form-label">Leave Description</label>
+                <input type="text" class="form-control" name="description" required>
+            </div>
+            <div class="col-md-4">
+                <label class="form-label"><b>Status (0 - Deactivated, 1 - Activated)</b></label>
+                <input type="text" class="form-control" name="status" required>
+            </div>
+            <div class="col-12 d-flex justify-content-center align-items-md-center">
+                <div class="col-md-6 d-flex justify-content-evenly align-items-md-center">
+                    <input class="btn btn-primary" type="submit" value="   Add   ">
+                    <input class="btn btn-warning" type="reset" value="  Reset  ">
+                    <a href="/admin/dashboard/leavetype"><button class="btn btn-danger" type="button">Cancel</button></a>
+                </div>
+            </div>
+          </form>
+    </div>               
+</div>
+
+
+{% endblock %}
+
+<!-- pattern="[A-Za-z\s]{2,45}"  -->

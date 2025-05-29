@@ -1,0 +1,52 @@
+@app.route("/contactsnhoursxxx")
+def contactsnhoursxxx():
+    return render_template("contactsnhoursxxx.html")
+    userid=103       # THIS userid TBC BY JC LOGIN
+    sql="SELECT trainerid,username, dateofbirth, address, qualification, jobtitle, email FROM trainer, user where trainer.userid=user.userid and user.userid='"+str(userid)+"'"
+    sql2="Select classname, datetime, location from class,classbooking, trainer where trainer.trainerid=classbooking.trainerid and classbooking.classid=class.classid and trainer.userid='"+str(userid)+"';"
+    sql3="select sessionname,location, datetime from session, sessionbooking, trainer where trainer.trainerid=sessionbooking.trainerid and sessionbooking.sessionid=session.sessionid and trainer.userid='"+str(userid)+"';"
+    connection = getCursor()
+    connection.execute(sql)
+    trainerList = connection.fetchall()
+    print(trainerList)
+    connection2 = getCursor()
+    connection2.execute(sql2)
+    classTimetable = connection2.fetchall()
+    connection3 = getCursor()
+    connection3.execute(sql3)
+    sessionTimetable = connection3.fetchall()
+    return render_template("trainingteam.html", trainerlist = [trainerList,classTimetable,sessionTimetable])
+
+@app.route("/members")
+def members():
+    return render_template("members.html")
+
+@app.route("/member/profile", methods=["GET", "POST"])
+def memberprofile():
+    memberid = request.form['search']
+    connection = getCursor()
+    connection.execute(
+        "SELECT * FROM member where memberid=%s;", (memberid,))
+    member_profile = connection.fetchall()
+    return render_template("memberprofile.html", member_Profile=member_profile)
+
+@app.route("/groupfitnesstimetable")
+def groupfitnesstimetable():
+    connection = getCursor()
+    connection.execute("select * from class;")
+    classTimetable = connection.fetchall()
+    print(classTimetable)
+    return render_template("groupfitnesstimetable.html", classtimetable=classTimetable)
+
+@app.route("/ptsessions")
+def ptsessions():
+    connection = getCursor()
+    connection.execute("select * from session;")
+    sessionTimetable = connection.fetchall()
+    print(sessionTimetable)
+    return render_template("ptsessions.html", sessiontimetable=sessionTimetable)
+
+# someone made this duplicate, this original one is not in use anymore.
+# @app.route("/contactsnhours")
+# def contactsnhours():
+#     return render_template("contactsnhours.html")

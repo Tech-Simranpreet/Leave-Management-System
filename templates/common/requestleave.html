@@ -1,0 +1,162 @@
+{% extends "common/applybase.html" %}
+{% block acontent %}
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.1.0/css/bootstrap.min.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.css">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.1/moment.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/jquery/dist/jquery.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.1.0/js/bootstrap.bundle.min.js"></script>
+
+<div class="container mt-5">
+    <div class="row justify-content-center">
+        <div class="col-lg-6">
+            <div class="card">
+                <div class="card-body">
+                    <h3 class="card-title text-center">Leave Request</h3>
+                    <form method="POST" action="/employee/apply/default">
+                        {% with messages = get_flashed_messages() %}
+                        {% if messages %}
+                        <div class="alert alert-danger">
+                            <ul>
+                                {% for message in messages %}
+                                <li>{{ message }}</li>
+                                {% endfor %}
+                            </ul>
+                        </div>
+                        {% endif %}
+                        {% endwith %}
+                        <div class="mb-3">
+                            <label class="form-label">Leave Type</label>
+                            <select class="form-select" name="leave_type_id" required>
+                                {% for type in leave_types %}
+                                <option value="{{type[0]}}">{{type[1]}}</option>
+                                {% endfor %}
+                            </select>
+                        </div>
+
+                        <div class="row mb-3">
+                            <div class="mb-3">
+                                <label for="leave_start_date" class="form-label">Start Date:</label>
+                                <input type="text" id="leave_start_date" class="form-control" name="leave_start_date"
+                                    placeholder="Select Start Date" required>
+                            </div>
+                            <div class="mb-3">
+                                <label for="leave_end_date" class="form-label">End Date:</label>
+                                <input type="text" id="leave_end_date" class="form-control" name="leave_end_date"
+                                    placeholder="Select End Date" required>
+                            </div>
+                            <div class="mb-3">
+                                <label for="additional_info" class="form-label">Additional Info:</label>
+                                <textarea id="additional_info" class="form-control" name="additional_info"></textarea>
+                                </textarea>
+                            </div>
+                            <div class="text-center">
+                                <button type="submit" class="btn btn-primary">Submit</button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.1/moment.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/jquery/dist/jquery.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.1.0/js/bootstrap.bundle.min.js"></script>
+
+<script>
+    $(document).ready(function () {
+        var startDate = moment();
+        var endDate = moment();
+        var disabledDates = [moment('2023-12-25'), moment('2023-01-01'), moment('2023-01-02'), moment('2023-02-06'), moment('2023-04-14'),
+        moment('2023-04-17'), moment('2023-04-25'), moment('2023-06-05'),
+        moment('2023-10-23'), moment('2023-12-25'), moment('2023-12-26'), moment('2024-01-01'), moment('2024-01-02'), moment('2024-02-06'),
+        moment('2024-03-29'), moment('2024-04-01'), moment('2024-04-25'), moment('2024-06-03'), moment('2024-06-28'), moment('2024-10-28'), moment('2024-12-25'), moment('2024-12-26')];
+
+
+
+        function isInvalidDate(date) {
+            if (date.day() == 6 || date.day() == 0) {
+                return true;
+            }
+            for (var i = 0; i < disabledDates.length; i++) {
+                if (date.isSame(disabledDates[i], 'day')) {
+                    return true;
+                }
+            }
+            return false;
+        }
+
+        $('#leave_start_date, #leave_end_date').daterangepicker({
+            startDate: startDate,
+            endDate: endDate,
+            minDate: moment().subtract(1, 'month'),
+            maxDate: moment().add(1, 'year'),
+            singleDatePicker: true,
+            autoApply: true,
+            showCustomRangeLabel: false,
+            isInvalidDate: isInvalidDate,
+            locale: {
+                format: 'DD-MM-YYYY'
+            }
+        });
+
+
+        $('.daterangepicker td.disabled').each(function () {
+            var date = $(this).attr('data-date');
+            var dayOfWeek = moment(date).day();
+            if (dayOfWeek == 0 || dayOfWeek == 6) {
+                $(this).addClass('weekend');
+            }
+            if (disabledDates.includes(moment(date).format('YYYY-MM-DD'))) {
+                $(this).addClass('public-holiday');
+            }
+        });
+
+
+        function calculatedHoursRequested() {
+            var startDate = moment($('#leave_start_date').val(), 'YYYY-MM-DD');
+            var endDate = moment($('#leave_end_date').val(), 'YYYY-MM-DD');
+            var duration = (enddate - startdate) / (1000 * 60 * 60 * 24);
+            var weekdays = 0;
+            var hours_per_day = 7.5;
+
+            for (var i = 0; i <= duration; i++) {
+                var currentDate = new Date(startdate.getTime() + (i * 24 * 60 * 60 * 1000));
+                if (currentDate.getDay() !== 0 && currentDate.getDay() !== 6 && !publicholidays.includes(currentDate)) {
+                    weekdays++;
+                }
+            }
+
+            var requested_hours = weekdays * hours_per_day;
+            $('#hrs_req').val(requested_hours);
+        }
+
+        $('#leave_start_date, #leave_end_date').on('change', calculatedHoursRequested);
+
+        $('#leave_start_date').on('apply.daterangepicker', function (ev, picker) {
+            var formattedDate = picker.startDate.format('YYYY-MM-DD');
+            $(this).val(picker.startDate.format('DD-MM-YYYY'));
+            $(this).attr('date-formatted', formattedDate);
+            calculatedHoursRequested();
+        });
+
+        $('#leave_end_date').on('apply.daterangepicker', function (ev, picker) {
+            var formattedDate = picker.endDate.format('YYYY-MM-DD');
+            $(this).val(picker.endDate.format('DD-MM-YYYY'));
+            $(this).attr('date-formatted', formattedDate);
+            calculatedHoursRequested();
+        });
+
+        $('leave-form').submit(function () {
+            var startDate = $('#leave_start_date').attr('data-formatted');
+            var endDate = $('#leave_end_date').attr('data-formatted');
+            $('#leave_start_date').val(startDate);
+            $('#leave_end_date').val(endDate);
+        });
+    });
+</script>
+{% endblock %}

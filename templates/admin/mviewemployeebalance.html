@@ -1,0 +1,94 @@
+{% extends "admin/adashboardbase.html" %}
+{% block zcontent %}
+<p>Search by First Name, Last Name, Employee ID  or click "Search" to display all employees</p>    
+
+<script>
+    function handleManageButtonClick(empId) {
+        $.get('/get_leave_balance/' + empId, function(data) {
+            $('#modalEmpID').text(empId);
+            if (data.length > 0) {
+                var leaveType = data[0][1];
+                var sickLeaveBal = data[0][0];
+
+                $('#modalLeaveType').text(leaveType);
+                $('#modalSickLeaveBal').text(sickLeaveBal);
+            } else {
+                $('#modalLeaveType').text('N/A');
+                $('#modalSickLeaveBal').text('N/A');
+            }
+            $('#balanceModal').modal('show');
+        });
+    }
+
+    function closeModal() {
+        $('#balanceModal').modal('hide');
+    }
+</script>
+
+<div class="container" style="margin: 0; padding: 0;">
+    <form action="{{ url_for('patrick.mviewemployeebalance') }}" method="POST">
+        <input type="text" name="search_query" placeholder="Search employee" pattern="^[a-zA-Z0-9]*$" title="Please enter only alphanumeric characters.">
+        <input type="submit" value="Search">
+    </form>
+
+    {% if request.method == 'POST' %}
+        {% if employees %}
+            <div class="table-responsive">
+                <table class="table table-striped table-hover table-bordered" style="width:100%; table-layout: fixed; white-space: normal; word-wrap: break-word;">
+                    <thead class="table-success">
+                        <tr>
+                            <th>Employee ID</th>
+                            <th>First Name</th>
+                            <th>Last Name</th>
+                            <th>Position Title</th>
+                            <th>Join Date</th>
+                            <th>Start Date</th>
+                            <th>Department Name</th>
+                            <th>Username (Email)</th>
+                            <th>Report To</th>
+                            <th>Approved Manager</th>
+                            <th>Action</th>
+                        </tr>
+                    </thead>
+                    <tbody style="background-color: white;">
+                        {% for employee in employees %}
+                        <tr>
+                            {% for value in employee %}
+                            <td>{{ value }}</td>
+                            {% endfor %}
+                            <td>
+                                <button class="btn btn-sm btn-primary manage-btn" onclick="handleManageButtonClick('{{ employee[0] }}')">View Balance</button>
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div> 
+        {% else %}
+            <p>No results found. Please try again.</p>
+        {% endif %}
+    {% endif %}
+</div>
+
+<!-- Modal -->
+<div id="balanceModal" class="modal fade">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Leave Balance</h5>
+                <button type="button" class="close" onclick="closeModal()">&times;</button>
+            </div>
+            <div class="modal-body">
+                <p>Employee ID: <span id="modalEmpID"></span></p>
+                <p>Leave Type: <span id="modalLeaveType"></span></p>
+                <p>Sick Leave Balance: <span id="modalSickLeaveBal"></span></p>
+            </div>
+            
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" onclick="closeModal()">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% endblock %}

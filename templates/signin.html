@@ -1,0 +1,45 @@
+<!-- Name: Xiaowei Li / Student ID: 1153496 -->
+
+<!-- {% include "common/message.html" %} -->
+{% extends "base.html" %}
+{% block content %}
+
+<div class="justify-content-center" style="text-align: center;">
+  <h1>Lincoln University Leave Management System</h1>
+</div>
+
+<div class="container" style="height:45vh; margin-bottom: 100px; ">
+  <div class="max-w-800 mx-auto" style="margin-top: 100px; padding-left: 400px;padding-right:400px;">
+    <div class="justify-content-center">
+
+      {% with messages = get_flashed_messages(with_categories=true) %}
+        {% if messages %}
+          {% for category, message in messages %}
+            <div class="max-w-800 mx-auto">
+              <div  class="alert alert-{{category}} alert-dismissible fade show" role="alert">
+                  <div class="d-flex justify-content-center"> {{ message }} </div>
+                  <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="close"></button>
+              </div>
+            </div>
+          {% endfor %}  
+        {% endif %}
+      {% endwith %}
+
+      <h3>Login</h3>
+
+      <form class="form-control" action="/user" method="POST">
+        <div class="mb-3">
+          <label class="form-label"><strong>Email</strong></label>
+          <input type="email" class="form-control" name="email">
+        </div>
+        <div class="mb-3">
+          <label class="form-label"><strong>Password</strong></label>
+          <input type="password" class="form-control" name="password">
+        </div>
+        <button type="submit" class="btn btn-primary">Sign In</button>        
+      </form>       
+    </div>
+  </div>
+</div>
+
+{% endblock %}

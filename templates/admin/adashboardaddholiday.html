@@ -1,0 +1,35 @@
+{% extends "admin/adashboardbase.html" %}
+{% block zcontent %}
+
+
+<div class="container">
+    <div class="max-w-800 mx-auto">
+        <h3>Add a New Public Holiday</h3>
+    
+        <form class="row g-3" action="/admin/dashboard/addholiday/add" method="POST">
+            <div class="col">
+                <label class="form-label">Date</label>
+                <input type="date" class="form-control" name="date" required>
+            </div>
+            <div class="col">
+                <label class="form-label">Holiday Name</label>
+                <input type="text" class="form-control" name="name" required>
+            </div>
+            
+            <input type="hidden" class="form-control" name="roletype" value="1" required>
+
+            <div class="col-12 d-flex justify-content-center align-items-md-center">
+                <div class="col-md-6 d-flex justify-content-evenly align-items-md-center">
+                    <input class="btn btn-primary" type="submit" value="   Add   ">
+                    <input class="btn btn-warning" type="reset" value="  Reset  ">
+                    <a href="/admin/dashboard/holiday"><button class="btn btn-danger" type="button">Cancel</button></a>
+                </div>
+            </div>
+          </form>
+    </div>               
+</div>
+
+
+{% endblock %}
+
+<!-- pattern="[A-Za-z\s]{2,45}"  -->

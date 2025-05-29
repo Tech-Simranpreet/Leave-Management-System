@@ -1,0 +1,87 @@
+{% extends "manager/mdashboardbase.html" %}
+{% block xcontent %}
+
+<script>
+
+    var startDateInput = document.querySelector('input[name="leave_start_date"]');
+    var endDateInput = document.querySelector('input[name="leave_end_date"]');
+    
+    var today = new Date().toISOString().split("T")[0];
+    
+    startDateInput.min = today;
+    
+    startDateInput.addEventListener('input', function() {
+      var startDate = new Date(startDateInput.value);
+      var minEndDate = new Date(startDate.getTime() + 24 * 60 * 60 * 1000);
+      var minEndDateStr = minEndDate.toISOString().split("T")[0];
+      endDateInput.min = minEndDateStr;
+    });
+    
+</script>
+    
+    <div class="container">
+        <div class="max-w-800 mx-auto">
+            <h3>Edit Leave Request</h3>
+    
+            <form class="row g-3" action="/manager/employee/requests/update" method="POST">
+                <div class="col">
+                    <label class="form-label"><b>First Name</b></label>
+                    <input type="text" class="form-control" name="emp_fname" value="{{emp_fname}}" disabled>
+                </div>
+                <div class="col">
+                    <label class="form-label"><b>Last Name</b></label>
+                    <input type="text" class="form-control" name="emp_lname" value="{{emp_lname}}" disabled>
+                </div>
+                <div class="col">
+                    <label class="form-label"><b>Leave Type</b></label>
+                    <select class="form-select" name="leave_type_id" required>
+                        {% for type in leave_types %}
+                            <option value="{{type[0]}}">{{type[1]}}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+                <div class="col">
+                    <label class="form-label"><b>Leave Start Date</b></label>
+                    <input type="date" class="form-control" id="startDateInput" name="leave_start_date" required>
+                </div>
+                <div class="col">
+                    <label class="form-label"><b>Leave End Date</b></label>
+                    <input type="date" class="form-control" id="endDateInput" name="leave_end_date" required>
+                </div>
+                <div class="col">
+                    <label class="form-label"><b>Note</b></label>
+                    <input type="text" class="form-control" name="additional_info" value="{{additional_info}}" required>
+                </div>
+    
+                <input type="hidden" class="form-control" name="leave_request_id" value="{{leave_request_id}}" required>
+                <input type="hidden" class="form-control" name="emp_id" value="{{emp_id}}" required>
+                <div class="col-12 d-flex justify-content-center align-items-md-center">
+                    <div class="col-md-6 d-flex justify-content-evenly align-items-md-center">
+                        <input class="btn btn-primary" type="submit" value="Update">
+                        <input class="btn btn-warning" type="reset" value="  Reset  ">
+                        <a href="{{ url_for('patrick.mviewrequest') }}?emp_id={{emp_id}}" class="btn btn-danger btn-sm">Cancel</a>
+                    </div>
+                </div>
+              </form>
+        </div>               
+    </div>
+
+    <script>
+
+        var startDateInput = document.querySelector('input[name="leave_start_date"]');
+        var endDateInput = document.querySelector('input[name="leave_end_date"]');
+    
+        var today = new Date().toISOString().split("T")[0];
+    
+        startDateInput.min = today;
+    
+        startDateInput.addEventListener('input', function() {
+        var startDate = new Date(startDateInput.value);
+        var minEndDate = new Date(startDate.getTime() + 24 * 60 * 60 * 1000);
+        var minEndDateStr = minEndDate.toISOString().split("T")[0];
+        endDateInput.min = minEndDateStr;
+        });
+    
+    </script>
+
+{% endblock %}

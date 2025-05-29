@@ -1,0 +1,44 @@
+{% extends "manager/mdashboardbase.html" %}
+{% block xcontent %}
+
+
+<div class="container">
+    <div class="max-w-800 mx-auto">
+        <div>            
+            <h5>Display Annual Leave Liability Report</h5>  
+            <p>The reporst presents a list of all the employees details and their leave balances for employees that you has the delegated authority to approve leave.</p>        
+        </div>
+    </div>               
+</div>
+<div class="tab-content">
+   
+    <div class="table-responsive">
+        <table id="table" class="table table-striped table-hover table-bordered" style="width:100%">
+            <thead class="table-success">
+                <tr>
+                    <th>Employee ID</th>
+                    <th>First Name</th>
+                    <th>Last Name</th>
+                    <th>Position Title</th>
+                    <th>Department Name</th>
+                    <th>Leave Balance(hours)</th>
+                    <th>Leave Balance(days)</th>
+                    <th>Approval Manager</th>   
+                </tr>
+            </thead>
+            <tbody style="background-color: white;">
+                {% for employee in employees %}
+                <tr>
+                    {% for value in employee %}
+                    <td>{{ value }}</td>
+                    {% endfor %}
+                    
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+
+
+</div>
+{% endblock %}

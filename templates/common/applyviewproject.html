@@ -1,0 +1,59 @@
+{% extends "common/applybase.html" %}
+{% block acontent %}
+
+<link href="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.css" rel="stylesheet" type="text/css" />
+<script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+<script src="https://cdn.jsdelivr.net/momentjs/latest/moment.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.min.js"></script>
+
+<script>
+    $(document).ready(function() {
+        $('#date').daterangepicker({
+            singleDatePicker: true,
+            minDate: moment(),
+            maxDate: moment().add(1, 'years'),
+            locale: {
+                format: 'YYYY-MM-DD'
+            }
+        });
+    });
+
+    function calculateProjectedBalance() {
+        var date = $('#date').val();  
+        var emp_id = "{{ emp_id }}";  
+        $.post("/manager/employee/projected/" + emp_id, {date: date})
+        .done(function(data) {
+            $('#projected-date').text(moment(data.date).format('YYYY-MM-DD'));
+            $('#annual-leave-balance').text(data.annual_leave_balance);
+            $('#leave-applied-not-paid').text(data.leave_applied_not_paid);
+            $('#leave-applied-not-approved').text(data.leave_applied_not_approved);
+            $('#projected-accrual').text(data.projected_accrual);
+            $('#estimated-projected-balance').text(data.estimated_projected_balance);
+        });
+    }
+</script>
+
+<div class="container">
+    <h4>Projected Leave Balance for {{ leave_balances[0]["emp_fname"] }} {{ leave_balances[0]["emp_lname"] }}</h4>
+
+    <form id="projected-balance-form" class="mb-3">
+        <label for="date" class="form-label">Select a date:</label>
+        <input type="text" id="date" name="date" class="form-control" required>
+        <input type="button" value="Calculate Projected Balance" onclick="calculateProjectedBalance()" class="btn btn-primary mt-2">
+    </form>
+
+    <div id="projected-balance" class="table-responsive">
+        <table class="table table-striped table-hover">
+            <tbody>
+                <tr><td>Projected date:</td><td><span id="projected-date"></span></td></tr>
+                <tr><td>Annual leave balance (as at close of last pay):</td><td><span id="annual-leave-balance"></span></td></tr>
+                <tr><td>Less leave applied but not yet paid:</td><td><span id="leave-applied-not-paid"></span></td></tr>
+                <tr><td>Less leave applied but not yet approved:</td><td><span id="leave-applied-not-approved"></span></td></tr>
+                <tr><td>Plus projected accrual to (date selected):</td><td><span id="projected-accrual"></span></td></tr>
+                <tr><td>Estimated Projected Leave Balance:</td><td><span id="estimated-projected-balance"></span></td></tr>
+            </tbody>
+        </table>
+    </div>
+</div>
+
+{% endblock %}
