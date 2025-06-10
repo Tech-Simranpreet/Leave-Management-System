@@ -69,7 +69,7 @@ To test the functionality, use one of the following demo employee accounts:
 | bob.johnson@university.edu       | 2           | password123  |
 | alice.williams@university.edu    | 1           | password456  |
 
-Data Model
+# Data Model
 
 The following two diagrams provided is Hierarchy Chart and Entity Relationship Model (ERM) designed by the CS team for the leave management system of Lincoln University.
 
