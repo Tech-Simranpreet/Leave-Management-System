@@ -59,7 +59,15 @@ I was primarily responsible for building the **Employee Leave Request Module** a
 - Exception handling and user feedback using `flash()`
 - JSON response handling for AJAX operations
 
+## Demo Credentials
 
+To test the functionality, use one of the following demo employee accounts:
+
+| Email                            | Role type ID | Password     |
+|----------------------------------|-------------|--------------|
+| alice.brown@university.edu       | 3           | 6eF#1bGhJ    |
+| bob.johnson@university.edu       | 2           | password123  |
+| alice.williams@university.edu    | 1           | password456  |
 
 Data Model
 
