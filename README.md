@@ -1,4 +1,65 @@
-# comp639-2023-s1-project2-group8
+# Employee Leave Management System
+
+This is a full-stack Leave Management System developed as part of a group project. The system supports employee leave applications, validations, notifications, and balance projections. My core responsibility was designing and implementing the **Leave Request Workflow**, including its business logic, database interactions, and user interface integration.
+
+# My Contribution
+
+I was primarily responsible for building the **Employee Leave Request Module** and **Projected Leave Balance Calculator**, which involved:
+
+### User Session Management
+- Checked for authenticated sessions before allowing access to leave functionality.
+- Ensured route protection and redirection for unauthenticated users.
+
+### Leave Request Functionality
+- Enabled employees to apply for leave by selecting leave type, start and end dates, and additional information.
+- Fetched employee data from the database using secure queries.
+- Implemented detailed validation to ensure:
+  - End date is not earlier than the start date.
+  - Duplicate leave entries for overlapping dates are prevented.
+  - Only working days are counted towards leave duration.
+  - Leave duration calculation excludes public holidays and weekends.
+  
+### Business Day & Leave Hour Calculation
+- Used `numpy.busday_count()` to calculate business days between two dates.
+- Integrated logic to count hours based on a standard 7.5 hours per day.
+- Accounted for public holidays (fetched from the database) to improve accuracy.
+
+### Email Notification System
+- Developed a function to send automated leave submission emails to the employee's approving manager.
+- Used SMTP with secure authentication and templated content.
+
+### Projected Leave Balance Estimator
+- Built a tool to help employees predict their leave balance for a future date.
+- Used current balance, pending approvals, approved leaves, and future accrual calculations to project remaining leave hours/days.
+- Returned the result via JSON for frontend AJAX consumption.
+
+## Technologies & Tools Used
+
+- **Backend**: Python, Flask, Jinja2
+- **Database**: MySQL (via `mysql.connector`)
+- **Frontend**: HTML, Bootstrap (via templates)
+- **Email**: SMTP, Gmail
+- **Libraries**: NumPy for business day calculations
+- **Others**: Sessions, Flash messaging, JSON API
+
+## Highlights of My Work
+
+- Integrated Flask with MySQL for real-time form data handling and validation.
+- Built reusable utility functions (`check_leave_exists`, `get_public_holidays`, `count_business_days`) to modularize logic.
+- Maintained a clean and user-friendly leave submission workflow with accurate business logic and validations.
+- Implemented a robust email notification feature for streamlined communication with managers.
+- Provided projected leave insights by dynamically calculating accruals based on future dates.
+
+## Key Skills Demonstrated
+
+- Flask routing and session-based authentication
+- SQL query building and parameterization
+- Time-based calculations using NumPy and datetime
+- Flask `Blueprints` for modular code structure
+- Exception handling and user feedback using `flash()`
+- JSON response handling for AJAX operations
+
+
 
 Data Model
 
