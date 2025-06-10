@@ -123,10 +123,10 @@ def leaverequest():
         business_days = count_business_days(start_date, end_date, public_holidays = public_holidays)
         total_days = (end_date - start_date).days + 1
         hours_per_day = 7.5
-        requested_hours = business_days * hours_per_day
+        requested_hours = float(business_days * hours_per_day)
     #Include end date 
         if total_days >= 1 and np.is_busday(end_date):
-            requested_hours += hours_per_day    
+            requested_hours += float(hours_per_day)    
         
         if requested_hours <= 0:
             flash("Invalid leave duration.")
