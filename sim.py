@@ -208,8 +208,8 @@ def check_overlapping_leave(email, start_date, end_date):
 
 
 def send_email_approval(to, subject, body, start_date, end_date):
-    your_email = 'patlorick@gmail.com'
-    your_password = 'pjhtgywxrkiuhorx'
+    your_email = ''
+    your_password = ''
             
     msg = EmailMessage()
     msg.set_content(body)
