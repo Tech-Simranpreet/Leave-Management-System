@@ -2,6 +2,10 @@
 
 This is a full-stack Leave Management System developed as part of a group project. The system supports employee leave applications, validations, notifications, and balance projections. My core responsibility was designing and implementing the **Leave Request Workflow**, including its business logic, database interactions, and user interface integration.
 
+# Live Demo
+
+https://simran.pythonanywhere.com/
+
 # My Contribution
 
 I was primarily responsible for building the **Employee Leave Request Module** and **Projected Leave Balance Calculator**, which involved:
